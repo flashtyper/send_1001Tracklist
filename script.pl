@@ -7,8 +7,8 @@ use Data::Dumper;
 use JSON::XS;
 use REST::Client;
 
-chdir("/opt/icinga2/plugins/discord/send_1001");
-my $webhook_url = 'https://discord.com/api/webhooks/1005412062358425631/Ogq7TVSFjf4suk9mvRqS2d7t0UqZloOTS9obx6Z2cTQ3_6wuoKaBosFg2gYzf3tcRo7G';
+chdir("your working directory");
+my $webhook_url = 'your webhook url';
 
 
 my $dj = $ARGV[0];
