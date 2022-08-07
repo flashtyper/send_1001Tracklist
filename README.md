@@ -13,3 +13,5 @@ you also need a file for each artist which is located in the same folder as "scr
 # else to say
 
 the exec time is 8 secs on my machine so its MAYBE A KIND OF unefficient... if someone has a better way to do that, pls tell me :D
+
+Edit: I redesigned the code, added some error checking and changed from curl to URI::Fetch. the excecution time is now at ~1 sec. I think thats ok for a perl-parsing-script ;)
