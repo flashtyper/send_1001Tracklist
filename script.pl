@@ -99,7 +99,7 @@ sub generateDiscordMessage {
         }
 
         my @fields_arr;
-        push(@fields_arr, {name => $new_title, value => "https://www.1001tracklist.com" . $set_link});
+        push(@fields_arr, {name => $new_title, value => "https://www.1001tracklists.com" . $set_link});
         push(@fields_arr, {name => "Playtime", value => $set_playtime, inline => "true"});
         push(@fields_arr, {name => "Media", value => $set_media, inline => "true"});
 
