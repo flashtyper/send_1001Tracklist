@@ -1,5 +1,7 @@
 # send_1001Tracklist
-a crap and dirty perl code which checks if a new tracklist of a given artist/dj at 1001tracklist.com is released and send it to discord
+a crap and dirty perl code which checks if a new tracklist of a given artist/dj at 1001tracklist.com is released and send it to discord.
+
+works with icinga2
 
 # usage
 ./script.pl adambeyer "Adam Beyer"
@@ -14,4 +16,4 @@ you also need a file for each artist which is located in the same folder as "scr
 
 the exec time is 8 secs on my machine so its MAYBE A KIND OF unefficient... if someone has a better way to do that, pls tell me :D
 
-Edit: I redesigned the code, added some error checking and changed from curl to URI::Fetch. the excecution time is now at ~1 sec. I think thats ok for a perl-parsing-script ;)
+*Edit:* I redesigned the code, added some error checking and changed from curl to URI::Fetch. the excecution time is now at ~1 sec. I think thats ok for a perl-parsing-script ;)
