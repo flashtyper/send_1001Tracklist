@@ -7,12 +7,23 @@ use Data::Dumper;
 use JSON::XS;
 use REST::Client;
 use URI::Fetch;
+use LWP::UserAgent;
+use utf8::all;
 
+chdir("<working directory>");
+my $webhook_url = '<your webhook url>';
 
-chdir("<your working directory>");
-my $webhook_url = '<your discord webhook url';
-
-
+my @useragents = (
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0',
+        'Mozilla/5.0 (Windows NT 6.0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.75 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.67 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.162 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.1805 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 6.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/66.0.3359.158 Safari/537.36',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:103.0) Gecko/20100101 Firefox/103.0'
+);
 
 
 
@@ -21,9 +32,18 @@ main();
 
 sub httpfetch {
         my $dj = shift;
-        my $res = URI::Fetch->fetch("https://www.1001tracklists.com/dj/$dj/index.html") or die URI::Fetch->errstr;
-        return $res->content if $res->is_success;
-        return -1;
+
+        my $ua  = LWP::UserAgent->new(
+                timeout                 => 10,
+                agent                   => $useragents[rand @useragents]
+        );
+        my $response = $ua->get("https://www.1001tracklists.com/dj/$dj/index.html");
+
+        if ($response->is_success) {
+                return $response->decoded_content;
+        } else {
+                die $response->status_line;
+        }
 }
 
 sub htmlparse {
@@ -144,10 +164,6 @@ sub main {
         }
         close (FH);
         my $content = httpfetch($dj);
-        if ($content eq -1) {
-                print "Failed to fetch url from 1001tracklist";
-                exit 3;
-        }
         my $parsed = htmlparse($content);
         if ($parsed eq -1) {
                 print "Failed to parse html content";
@@ -155,6 +171,7 @@ sub main {
         }
 
         my $new_title = $parsed->{flat}->[3]->[3];
+
         if ($old_title ne $new_title) {
                 my $payload = generateDiscordMessage($parsed, $new_title, $dj_display);
                 my $payload_json = generateJSON($payload);
